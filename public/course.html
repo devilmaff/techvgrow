@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Content</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 {
+            color: #FFD700;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .video-list {
+            list-style: none;
+            padding: 0;
+        }
+        .video-list li {
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
+            border-radius: 8px;
+            padding: 15px 20px;
+            transition: background 0.3s ease;
+        }
+        .video-list li:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        .video-list a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        .video-list a i {
+            margin-right: 15px;
+            color: #FFD700;
+        }
+        #message {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #FFD700;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        <h1 id="course-title">Loading Course...</h1>
+        <ul id="video-list" class="video-list"></ul>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const courseTitleEl = document.getElementById('course-title');
+            const videoListEl = document.getElementById('video-list');
+            const messageEl = document.getElementById('message');
+
+            const params = new URLSearchParams(window.location.search);
+            const courseId = params.get('id');
+
+            if (!courseId) {
+                messageEl.textContent = 'No course specified.';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/courses/${courseId}`);
+                
+                if (response.ok) {
+                    const course = await response.json();
+                    courseTitleEl.textContent = course.title;
+
+                    if (course.videos && course.videos.length > 0) {
+                        course.videos.forEach(video => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `<a href="${video.url}" target="_blank"><i class="fas fa-play-circle"></i> ${video.title}</a>`;
+                            videoListEl.appendChild(listItem);
+                        });
+                    } else {
+                        messageEl.textContent = 'No videos found for this course.';
+                    }
+                } else {
+                    const errorData = await response.json();
+                    messageEl.textContent = errorData.msg || 'Failed to load course content. You may not have access.';
+                    courseTitleEl.textContent = 'Access Denied';
+                }
+            } catch (err) {
+                messageEl.textContent = 'An error occurred while fetching course data.';
+            }
+        });
+    </script>
+</body>
+</html>

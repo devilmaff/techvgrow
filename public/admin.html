@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - VGrow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); color: #fff;
+            padding: 10px;
+        }
+        .bg-pattern {
+            position: fixed; width: 100%; height: 100%; z-index: -1;
+            background-image: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 20px auto; 
+            padding: 20px;
+            background: rgba(0,0,0,0.7); 
+            border-radius: 15px; 
+        }
+        h1 { 
+            color: #FFD700; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #FFD700; 
+            padding-bottom: 10px; 
+            font-size: 1.8rem;
+        }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #FFD700; text-decoration: none; }
+        #message { text-align: center; font-size: 1.2rem; padding: 40px; }
+        
+        /* Table Styles */
+        .submissions-table { width: 100%; border-collapse: collapse; }
+        .submissions-table thead { background-color: rgba(255, 215, 0, 0.1); }
+        .submissions-table th, .submissions-table td { 
+            padding: 12px 15px; 
+            text-align: left; 
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2); 
+        }
+        .submissions-table th { color: #FFD700; }
+        .submissions-table tbody tr:hover { background-color: rgba(255, 255, 255, 0.05); }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .submissions-table thead {
+                display: none;
+            }
+            .submissions-table, .submissions-table tbody, .submissions-table tr, .submissions-table td {
+                display: block; width: 100%;
+            }
+            .submissions-table tr { 
+                margin-bottom: 15px; 
+                border: 1px solid rgba(255, 215, 0, 0.2); 
+                border-radius: 8px; 
+                overflow: hidden; 
+            }
+            .submissions-table td { 
+                text-align: right; 
+                padding-left: 50%; 
+                position: relative; 
+                border-bottom: 1px dotted rgba(255,255,255,0.1); 
+            }
+            .submissions-table td:last-child {
+                border-bottom: none;
+            }
+            .submissions-table td::before {
+                content: attr(data-label); 
+                position: absolute; 
+                left: 15px;
+                width: calc(50% - 30px); 
+                text-align: left; 
+                font-weight: bold; 
+                color: #FFD700;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="container">
+        <a href="/index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        <h1>Enrollment Submissions</h1>
+        <p id="message">Loading submissions...</p>
+        <table class="submissions-table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Course</th>
+                </tr>
+            </thead>
+            <tbody id="submissions-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const table = document.querySelector('.submissions-table');
+            const tableBody = document.getElementById('submissions-body');
+            const messageEl = document.getElementById('message');
+
+            await fetchSubmissions();
+
+            async function fetchSubmissions() {
+                 try {
+                    const response = await fetch('/api/enrollment');
+                    if (response.ok) {
+                        const submissions = await response.json();
+                        if (submissions.length === 0) {
+                            messageEl.textContent = 'No submissions found.';
+                            return;
+                        }
+                        renderTable(submissions);
+                        messageEl.style.display = 'none';
+                        table.style.display = 'table';
+                    } else {
+                        window.location.href = '/login.html';
+                    }
+                } catch (err) {
+                    messageEl.textContent = 'An error occurred while fetching data.';
+                    console.error(err);
+                }
+            }
+
+            function renderTable(submissions) {
+                tableBody.innerHTML = '';
+                submissions.forEach(sub => {
+                    const row = tableBody.insertRow();
+                    const date = new Date(sub.submissionDate).toLocaleString('en-IN');
+                    
+                    row.innerHTML = `
+                        <td data-label="Date">${date}</td>
+                        <td data-label="Name">${sub.name}</td>
+                        <td data-label="Email">${sub.email}</td>
+                        <td data-label="Phone">${sub.phone}</td>
+                        <td data-label="Course">${sub.course}</td>
+                    `;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

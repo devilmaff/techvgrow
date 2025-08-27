@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You! - VGrow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body {
+            display: flex; align-items: center; justify-content: center; min-height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); color: #fff; text-align: center;
+        }
+        .bg-pattern {
+            position: fixed; width: 100%; height: 100%; z-index: -1;
+            background-image: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+        }
+        .container { max-width: 600px; padding: 40px; }
+        .icon { font-size: 5rem; color: #28a745; margin-bottom: 20px; }
+        h1 { color: #FFD700; font-size: 3rem; margin-bottom: 15px; }
+        p { color: #ccc; font-size: 1.2rem; margin-bottom: 30px; }
+        .home-btn {
+            display: inline-block; padding: 12px 30px; border-radius: 25px; text-decoration: none;
+            background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .home-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="container">
+        <div class="icon"><i class="fas fa-check-circle"></i></div>
+        <h1>Thank You!</h1>
+        <p>Your application has been received. We will get back to you shortly.</p>
+        <a href="/index.html" class="home-btn">Back to Home</a>
+    </div>
+</body>
+</html>

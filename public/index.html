@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VGrow - Online Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .bg-pattern {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            animation: bgMove 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-20px, -20px) rotate(1deg); }
+            66% { transform: translate(20px, -10px) rotate(-1deg); }
+        }
+
+      
+        nav {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #FFD700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+     
+        .hero {
+            padding: 150px 20px 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #ccc;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #FFD700;
+            padding: 15px 40px;
+            border: 2px solid #FFD700;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: #FFD700;
+            color: #000;
+            transform: translateY(-3px);
+        }
+
+      
+        .features {
+            padding: 80px 20px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #999;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #FFD700;
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+       
+        .courses {
+            padding: 80px 20px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .course-image {
+            height: 200px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #000;
+        }
+
+        .course-content {
+            padding: 30px;
+        }
+
+        .course-category {
+            color: #FFD700;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .course-description {
+            color: #ccc;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .course-price {
+            font-size: 1.5rem;
+            color: #FFD700;
+            font-weight: 700;
+        }
+
+        .course-rating {
+            color: #FFD700;
+        }
+
+        .course-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .course-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        
+        .testimonials {
+            padding: 80px 20px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 4rem;
+            color: rgba(255, 215, 0, 0.2);
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-text {
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .author-info h4 {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+     
+        .cta {
+            padding: 100px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #FFD700;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+      
+        footer {
+            background: #000;
+            padding: 60px 20px 30px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #FFD700;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            color: #666;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD700;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #FFD700;
+            color: #000;
+            transform: translateY(-3px);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #FFD700;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+  
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+  
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-seedling"></i>
+                VGrow
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li id="auth-link"><a href="login.html" class="nav-cta">Get Started</a></li>
+            </ul>
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+
+    <section class="hero" id="home">
+        <div class="hero-content" data-aos="fade-up">
+            <h1>Grow Your Knowledge with WeGrow</h1>
+            <p>Unlock your potential with our comprehensive online learning platform. Join thousands of students worldwide in their journey to success.</p>
+            <div class="hero-buttons">
+                <a href="#courses" class="btn-primary">Explore Courses</a>
+                <a href="login.html" class="btn-secondary">Start Learning</a>
+            </div>
+        </div>
+    </section>
+
+ 
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Why Choose WeGrow?</h2>
+                <p>Experience learning like never before with our innovative features</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Interactive Learning</h3>
+                    <p>Engage with hands-on projects, quizzes, and real-world scenarios that make learning effective and enjoyable.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Expert Instructors</h3>
+                    <p>Learn from industry professionals and experienced educators who are passionate about teaching and mentoring.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>Certified Courses</h3>
+                    <p>Earn recognized certificates upon completion of courses that boost your career prospects and credibility.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Flexible Schedule</h3>
+                    <p>Learn at your own pace with 24/7 access to course materials. Fit education around your busy lifestyle.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Community Support</h3>
+                    <p>Join a vibrant community of learners, participate in discussions, and get help when you need it.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Track Progress</h3>
+                    <p>Monitor your learning journey with detailed analytics and progress reports to stay motivated and on track.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+ 
+    <section class="courses" id="courses">
+        <div class="container">
+           <section class="courses" id="courses">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>Popular Courses</h2>
+            <p>Discover our most sought-after courses designed to accelerate your growth</p>
+        </div>
+        <div class="courses-grid" id="courses-grid">
+            </div>
+    </div>
+</section>
+            <div class="courses-grid">
+                <div class="course-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="course-image">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-category">Programming</div>
+                        <h3 class="course-title">Web Development Bootcamp</h3>
+                        <p class="course-description">Master HTML, CSS, JavaScript, and modern frameworks to build stunning websites from scratch.</p>
+                        <div class="course-meta">
+                          
+                            <span class="course-rating">
+                                <i class="fas fa-star"></i> 4.8
+                            </span>
+                        </div>
+                        <button class="course-btn">Enroll Now</button>
+                    </div>
+                </div>
+                <div class="course-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="course-image">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-category">Business</div>
+                        <h3 class="course-title">Digital Marketing Mastery</h3>
+                        <p class="course-description">Learn SEO, social media marketing, and content strategy to grow any business online.</p>
+                        <div class="course-meta">
+                           
+                            <span class="course-rating">
+                                <i class="fas fa-star"></i> 4.9
+                            </span>
+                        </div>
+                        <button class="course-btn">Enroll Now</button>
+                    </div>
+                </div>
+                <div class="course-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="course-image">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-category">Design</div>
+                        <h3 class="course-title">UI/UX Design Fundamentals</h3>
+                        <p class="course-description">Create beautiful and user-friendly interfaces with industry-standard design tools and principles.</p>
+                        <div class="course-meta">
+                            
+                            <span class="course-rating">
+                                <i class="fas fa-star"></i> 4.7
+                            </span>
+                        </div>
+                        <button class="course-btn">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>What Our Students Say</h2>
+                <p>Real stories from real learners who transformed their careers with WeGrow</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                    <p class="testimonial-text">WeGrow completely changed my career trajectory. The courses are comprehensive and the instructors are incredibly supportive. I landed my dream job within 3 months of completion!</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JD</div>
+                        <div class="author-info">
+                            <h4>Jane Doe</h4>
+                            <p>Software Developer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                    <p class="testimonial-text">The flexibility of learning at my own pace while working full-time was amazing. The community forums helped me stay motivated and connected with fellow learners.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MS</div>
+                        <div class="author-info">
+                            <h4>Mike Smith</h4>
+                            <p>Digital Marketer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                    <p class="testimonial-text">I was skeptical about online learning, but WeGrow exceeded all my expectations. The hands-on projects and real-world applications made all the difference.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SC</div>
+                        <div class="author-info">
+                            <h4>Sarah Chen</h4>
+                            <p>UI/UX Designer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+ 
+    <section class="cta" id="cta">
+        <div class="container" data-aos="fade-up">
+            <h2>Ready to Start Your Learning Journey?</h2>
+            <p>Join thousands of students who are already growing their skills and advancing their careers with WeGrow.</p>
+            <a href="enroll.html" class="btn-primary">Get Started Today</a>
+        </div>
+    </section>
+
+  
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About WeGrow</h3>
+                <p>WeGrow is a leading online learning platform dedicated to empowering individuals with the skills they need to succeed in today's digital world.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#courses">Courses</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="#">Programming</a></li>
+                    <li><a href="#">Business</a></li>
+                    <li><a href="#">Design</a></li>
+                    <li><a href="#">Marketing</a></li>
+                    <li><a href="#">Data Science</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul>
+                    <li><i class="fas fa-envelope"></i> techvgrow@gmail.com</li>
+                    <li><i class="fas fa-phone"></i> +91 9363305504</li>
+             
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 WeGrow. All rights reserved. | Privacy Policy | Terms of Service</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    // --- GLOBAL STATE ---
+    let currentUser = null;
+    let allCourses = [];
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        AOS.init({ duration: 1000, once: true });
+        setupEventListeners();
+        
+        await fetchCourses();
+        await verifyUser(); // This will also update the UI
+    });
+
+    // --- DATA FETCHING ---
+    async function fetchCourses() {
+        try {
+            const response = await fetch('/api/courses');
+            if (response.ok) {
+                allCourses = await response.json();
+                renderCourses();
+            }
+        } catch (error) {
+            console.error('Failed to fetch courses:', error);
+        }
+    }
+
+    async function verifyUser() {
+        try {
+            const response = await fetch('/api/auth/verify');
+            if (response.ok) {
+                currentUser = await response.json();
+            }
+        } catch (error) {
+            console.error('Error verifying auth status:', error);
+        } finally {
+            // Update UI based on login status and enrollments
+            updateUIAfterAuth();
+        }
+    }
+
+    // --- UI RENDERING AND UPDATES ---
+    function renderCourses() {
+        const coursesGrid = document.getElementById('courses-grid');
+        if (!coursesGrid) return;
+        
+        coursesGrid.innerHTML = ''; // Clear existing content
+        allCourses.forEach(course => {
+            const courseCard = document.createElement('div');
+            courseCard.className = 'course-card';
+            // Add the course ID as a data attribute
+            courseCard.setAttribute('data-course-id', course._id);
+            courseCard.innerHTML = `
+                <div class="course-image"><i class="fas fa-code"></i></div>
+                <div class="course-content">
+                    <div class="course-category">${course.category || 'General'}</div>
+                    <h3 class="course-title">${course.title}</h3>
+                    <p class="course-description">${course.description}</p>
+                    <div class="course-meta">
+                        <span class="course-rating"><i class="fas fa-star"></i> 4.8</span>
+                    </div>
+                    <button class="course-btn">Enroll Now</button>
+                </div>`;
+            coursesGrid.appendChild(courseCard);
+        });
+    }
+
+    function updateUIAfterAuth() {
+        updateNav();
+        updateCourseButtons();
+        updateHeroButton();
+    }
+
+    function updateNav() {
+        const authLink = document.getElementById('auth-link');
+        if (!authLink) return;
+
+        if (currentUser) {
+            authLink.innerHTML = `
+                <span>Welcome, ${currentUser.name}!</span>
+                <a href="/api/auth/logout" class="nav-cta">Logout</a>`;
+            authLink.style.display = 'flex';
+            authLink.style.alignItems = 'center';
+            authLink.style.gap = '15px';
+        } else {
+            authLink.innerHTML = `<a href="login.html" class="nav-cta">Get Started</a>`;
+        }
+    }
+
+    function updateCourseButtons() {
+        document.querySelectorAll('.course-card').forEach(card => {
+            const courseId = card.getAttribute('data-course-id');
+            const btn = card.querySelector('.course-btn');
+            
+            if (currentUser) {
+                // Check if user's enrolledCourses includes the current courseId
+                const isEnrolled = currentUser.enrolledCourses.includes(courseId);
+                
+                if (isEnrolled) {
+                    btn.textContent = 'Access Course';
+                    btn.style.background = 'linear-gradient(135deg, #28a745, #218838)'; // Green for unlocked
+                    btn.onclick = () => {
+                        window.location.href = `/course.html?id=${courseId}`;
+                    };
+                } else {
+                    btn.textContent = 'Enroll Now';
+                    btn.style.background = ''; // Reset to default
+                    btn.onclick = () => {
+                        alert('Please contact us to enroll in this course.');
+                    };
+                }
+            } else {
+                // Not logged in
+                btn.textContent = 'Enroll Now';
+                btn.style.background = ''; // Reset to default
+                btn.onclick = () => {
+                    alert('Please login or sign up to continue.');
+                    window.location.href = 'login.html';
+                };
+            }
+        });
+    }
+
+    function updateHeroButton() {
+        const heroBtn = document.querySelector('.hero-buttons a.btn-secondary');
+        if (heroBtn && currentUser) {
+            heroBtn.textContent = 'Go To Courses';
+            heroBtn.href = '#courses';
+        } else if(heroBtn) {
+            heroBtn.textContent = 'Start Learning';
+            heroBtn.href = 'login.html';
+        }
+    }
+
+    // --- STATIC EVENT LISTENERS ---
+    function setupEventListeners() {
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Mobile menu
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenuToggle.addEventListener('click', function() {
+            const isVisible = navLinks.style.display === 'flex';
+            navLinks.style.display = isVisible ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.background = 'rgba(0, 0, 0, 0.95)';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.padding = '20px';
+        });
+
+        // Nav scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                nav.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+    }
+</script>
+</body>
+</html>
